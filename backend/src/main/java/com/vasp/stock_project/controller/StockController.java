@@ -1,4 +1,5 @@
 package com.vasp.stock_project.controller;
+import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,28 +29,28 @@ public class StockController {
     // All assets
     
     // GET operation
-    @GetMapping("/stocks")
-    List<Stock> all() {
+    @GetMapping()
+    List<Stock> getAll() {
         return repository.findAll();
     }
 
     // POST operation
-    @PostMapping("/stocks")
-    Stock newStock(@RequestBody Stock newStock){
+    @PostMapping()
+    Stock create(@RequestBody Stock newStock){
         return repository.save(newStock);
     }
     
     // Single item
     
     // GET operation
-    @GetMapping("/stocks/{id}")
-    Optional<Stock> one(@PathVariable Long id) {
+    @GetMapping("/api/stocks/{id}")
+    Optional<Stock> getOne(@PathVariable Long id) {
         return repository.findById(id);
     }
 
     // PUT operation
-    @PutMapping("/stocks/{id}")
-    Stock replaceStock(@RequestBody Stock newStock, @PathVariable Long id) {
+    @PutMapping("/api/stocks/{id}")
+    Stock update(@RequestBody Stock newStock, @PathVariable Long id) {
         return repository.findById(id).map(stock -> {
             stock.setName(newStock.getName());
             stock.setSymbol(newStock.getSymbol());

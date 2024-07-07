@@ -42,13 +42,13 @@ public class StockController {
     // Single item
     
     // GET operation
-    @GetMapping("/api/stocks/{id}")
+    @GetMapping("/{id}")
     Optional<Stock> getOne(@PathVariable Long id) {
         return repository.findById(id);
     }
 
     // PUT operation
-    @PutMapping("/api/stocks/{id}")
+    @PutMapping("/{id}")
     Stock update(@RequestBody Stock newStock, @PathVariable Long id) {
         return repository.findById(id).map(stock -> {
             stock.setName(newStock.getName());
@@ -58,8 +58,5 @@ public class StockController {
         }).orElseGet(() -> {
             return repository.save(newStock);
         });
-    }
-
-    
-
+    }    
 }

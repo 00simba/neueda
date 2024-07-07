@@ -1,84 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import Home from './components/Home';
+import Market from './components/Market';
+import Portfolio from './components/Portfolio';
+import SingleStock from './components/SingleStock';
+import './index.css';
 
-function App() {
-  const [stocks, setStocks] = useState([]);
 
-  const [data, setData] = useState({
-    symbol: "",
-    name: "",
-    price: 0
-  });
-
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setData({
-      ...data,
-      [e.target.name]: value
-    });
-  };
-
-  useEffect(() => {
-    fetch('http://localhost:8080/api/stocks')  // dont know what endpoint is yet
-      .then(response => response.json())
-      .then(data => setStocks(data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
-
-  function postStock(){
-
-    axios.post('http://localhost:8080/api/stocks', data).then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Stock Dashboard</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Symbol</th>
-              <th>Name</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stocks.map(stock => (
-              <tr key={stock.id}>
-                <td>{stock.id}</td>
-                <td>{stock.symbol}</td>
-                <td>{stock.name}</td>
-                <td>${stock.price.toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <br/>
+    <Router>
+      <div>
+        <div className="bg-blue-900 text-white p-4 flex justify-between items-center">
+          <div className="text-2xl font-bold">VASP</div>
+          <div className="space-x-4">
+            <Link to="/" className="hover:text-green-400">Home</Link>
+            <Link to="/portfolio" className="hover:text-green-400">Portfolio</Link>
+            <Link to="/market" className="hover:text-green-400">Market</Link>
+          </div>
+        </div>
 
-        <form onSubmit={postStock}>
-          <label>Symbol</label><br/>
-          <input type="text" name="symbol" value={data.symbol} onChange={handleChange}></input><br/>
-          <label>Name</label><br/>
-          <input type="text" name="name" value={data.name} onChange={handleChange}></input><br/>
-          <label>Price</label><br/>
-          <input type="text" name="price" value={data.price} onChange={handleChange}></input><br/>
-         <button type="submit">Add Stock</button>
-         </form>
-        <br/>
-        
-      </header>
-    </div>
+        <div className="container mx-auto p-4">
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/market" element={<Market />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/stock/:id" element={<SingleStock />} />
+          </Routes>
+        </div>
+
+        <div className="bg-blue-900 text-white text-center p-4 mt-4">
+          <p>&copy; 2024 VASP. All rights reserved.</p>
+        </div>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
+
+
 
 
 
